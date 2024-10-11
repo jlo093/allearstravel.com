@@ -43,7 +43,8 @@ class DynamicPricingService
                         );
                     } else {
                         $rate->setFinalPrice(
-                            $disneyPrice - self::MAX_ABSOLUTE_DISCOUNT
+                            // $disneyPrice - self::MAX_ABSOLUTE_DISCOUNT
+                            $rate->getLowestPrice() + self::MAX_ABSOLUTE_DISCOUNT
                         );
                     }
                 }

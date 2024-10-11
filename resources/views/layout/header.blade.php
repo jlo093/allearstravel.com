@@ -42,7 +42,7 @@
                         <a class="nav-item" href="about.html">About</a>
                     </li>
                     <li class="header_nav-list_item dropdown">
-                        <a class="nav-item @if (str_contains(request()->getRequestUri(), 'destination')) current @endif" href="about.html">Parks &amp; Resorts</a>
+                        <a class="nav-item @if (str_contains(request()->getRequestUri(), 'destination') || str_contains(request()->getRequestUri(), 'start')) current @endif" href="{{ route('booking.start') }}">Parks &amp; Resorts</a>
                     </li>
                     <li class="header_nav-list_item" style="margin-right: 5px">
                         <a class="nav-link nav-link--contacts d-inline-flex align-items-center" href="about.html">Help</a>

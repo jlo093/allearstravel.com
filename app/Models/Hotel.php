@@ -34,7 +34,7 @@ class Hotel extends Model
         /** @var Media $thumb */
         $thumb = Media::where('model', self::class)
             ->where('model_id', $this->id)
-            ->where('is_default', true)
+            //->where('is_default', true)
             ->first();
 
         return str_replace(['{size}'], ['1024x768'], $thumb?->filename ?? '');

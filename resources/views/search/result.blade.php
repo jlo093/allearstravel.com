@@ -18,16 +18,15 @@
     <div class="container">
         <ul class="rooms_list">
             @foreach ($hotels as $hotel)
-                @dump($hotel)
                 @if (empty($hotel->rates[0]->final_price))
                     @continue
                 @endif
             <li class="rooms_list-item mb-5" data-order="1" data-aos="fade-up">
                 <div class="item-wrapper d-md-flex">
-                    <div class="media">
+                    <div class="media" style="padding-top:20px;padding-left:20px;">
                         <picture>
                             <source data-srcset="{{ $hotel->hotel?->thumbnail() }}" srcset="{{ $hotel->hotel?->thumbnail() }}" />
-                            <img class="lazy" data-src="{{ $hotel->hotel?->thumbnail() }}" src="{{ $hotel->hotel?->thumbnail() }}" alt="media" />
+                            <img class="lazy" style="border-radius:4px" data-src="{{ $hotel->hotel?->thumbnail() }}" src="{{ $hotel->hotel?->thumbnail() }}" alt="media" />
                         </picture>
                     </div>
                     <div class="main d-md-flex justify-content-between">
@@ -38,9 +37,6 @@
                                     ⭐
                                 @endfor
                             </span>
-                            @if ($hotel->rates[0]->disney_price > $hotel->rates[0]->final_price)
-                                Great deal! Our rate is &pound;{{ number_format($hotel->rates[0]->disney_price - $hotel->rates[0]->final_price, 2) }} cheaper than booking direct!
-                            @endif
                             <p class="main_description">{{ $hotel->hotel?->description }}</p>
                             <div class="main_amenities">
                                 @if (!empty($hotel->rates[0]->payment_options->payment_types[0]->cancellation_penalties['free_cancellation_before']))
@@ -65,6 +61,11 @@
                                         <span class="main_pricing-item">
                                             from <span class="h2">&pound;{{ round($hotel->rates[0]->final_price) }}</span>
                                         </span>
+                                @if ($hotel->rates[0]->disney_price > $hotel->rates[0]->final_price)
+                                    <span class="mb-3" style="font-weight: bold; color: #00bb00;">
+                                        &pound;{{ number_format($hotel->rates[0]->disney_price - $hotel->rates[0]->final_price, 2) }} saving vs. booking direct
+                                    </span>
+                                @endif
                                 <span class="main_pricing-item">
                                             <span class="h4"></span>
                                             @php $region = \App\Enums\RegionEnum::getRegionEnumById($hotel->hotel?->region_id ?? \App\Enums\RegionEnum::DISNEY_WORLD->value); @endphp

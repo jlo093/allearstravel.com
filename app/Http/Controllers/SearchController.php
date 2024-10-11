@@ -64,9 +64,20 @@ class SearchController extends Controller
                 $providerResponse = $this->staticPricingService->applyStaticPricing($providerResponse);
             }
 
-            // TODO: Load as a whole when building DTO, not one by one
+            $allRegionHotels = Hotel::where('region_id', $region->value)->get();
+
+            $regionHotelMapping = [];
+            /** @var Hotel $hotel */
+            foreach ($allRegionHotels as $hotel) {
+                $regionHotelMapping[$hotel->ratehawk_id] = $hotel;
+            }
+
             foreach ($providerResponse->hotels as $hotel) {
-                $hotel->hotel = Hotel::where('ratehawk_id', $hotel->id)->first();
+                if (!isset($regionHotelMapping[$hotel->id])) {
+                    continue;
+                }
+
+                $hotel->hotel = $regionHotelMapping[$hotel->id];
             }
 
             usort($providerResponse->hotels, function (
