@@ -6,7 +6,7 @@ use App\Data\DisneyHotelPrice;
 use App\Data\DisneyHotelResultSet;
 use App\Data\ProviderHotelPrice;
 use App\Data\ProviderHotelResultSet;
-use App\Services\Internal\PricingService;
+use App\Services\Internal\DynamicPricingService;
 use PHPUnit\Framework\TestCase;
 
 class PricingServiceTest extends TestCase
@@ -21,7 +21,7 @@ class PricingServiceTest extends TestCase
 
     private function setupPricingAndGetResult($disney, $provider): float
     {
-        $pricingService = new PricingService();
+        $pricingService = new DynamicPricingService();
 
         $disneyPrice = new DisneyHotelPrice($disney, 'fort-wilderness');
         $disneyPriceSet = new DisneyHotelResultSet([$disneyPrice]);

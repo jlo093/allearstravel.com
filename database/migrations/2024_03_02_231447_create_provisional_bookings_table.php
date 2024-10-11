@@ -21,13 +21,13 @@ class CreateProvisionalBookingsTable extends Migration
             $table->float('price_gross');
             $table->string('supplier_reference')->nullable();
             $table->string('external_reference')->nullable();
+            $table->string('detail')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->boolean('has_free_cancellation')->default(false);
             $table->date('free_cancellation_deadline')->nullable();
             $table->date('payment_deadline');
             $table->foreignId('hotel_id')->nullable();
-            $table->foreignId('order_id');
             $table->timestamps();
 
             $table->foreign('hotel_id')->references('id')->on('hotels');

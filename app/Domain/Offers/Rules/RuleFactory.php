@@ -15,7 +15,8 @@ class RuleFactory
     public function getRuleClass(string $class): OrderRule|RateRule
     {
         return match ($class) {
-            RateHasMinimumMargin::class => new RateHasMinimumMargin(),
+            'minMargin' => new RateHasMinimumMargin(),
+            'maxMargin' => new RateHasMaximumMargin(),
             default => throw new Exception('Could not resolve rule into rule class.'),
         };
     }

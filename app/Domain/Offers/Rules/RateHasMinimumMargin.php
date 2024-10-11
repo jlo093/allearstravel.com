@@ -2,7 +2,7 @@
 
 namespace App\Domain\Offers\Rules;
 
-use App\Models\Rate;
+use App\Services\RateHawk\Responses\DTO\Rate;
 use App\Traits\HasSerialisedData;
 
 class RateHasMinimumMargin implements RateRule
@@ -13,7 +13,7 @@ class RateHasMinimumMargin implements RateRule
 
     public function isApplicable(Rate $rate): bool
     {
-        return ($rate->price_gross - $rate->cost_gross) > $this->minMargin;
+        return ($rate->final_price - $rate->getLowestPrice()) > $this->minMargin;
     }
 
     public function loadSerialisedData(array $data): void

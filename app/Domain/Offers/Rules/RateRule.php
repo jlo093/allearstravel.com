@@ -2,7 +2,7 @@
 
 namespace App\Domain\Offers\Rules;
 
-use App\Models\Rate;
+use App\Services\RateHawk\Responses\DTO\Rate;
 
 interface RateRule
 {

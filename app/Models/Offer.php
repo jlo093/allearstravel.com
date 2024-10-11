@@ -16,6 +16,6 @@ class Offer extends Model
 
     public function rules(): HasMany
     {
-        //return $this->hasMany(Rule);
+        return $this->hasMany(Rule::class);
     }
 }

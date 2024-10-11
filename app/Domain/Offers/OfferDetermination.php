@@ -4,7 +4,7 @@ namespace App\Domain\Offers;
 
 use App\Models\Offer;
 use App\Models\Order;
-use App\Models\Rate;
+use App\Services\RateHawk\Responses\DTO\Rate;
 
 /**
  * OfferDetermination
@@ -33,7 +33,7 @@ class OfferDetermination
             $isFulfilled = true;
 
             foreach ($offer->rules as $rule) {
-                if (! $rule->isApplicable($rate)) {
+                if (! $rule->isApplicable(null, $rate)) {
                     $isFulfilled = false;
 
                     break;

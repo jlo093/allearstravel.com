@@ -22,7 +22,7 @@ class Rule extends Model
         'payload' => 'array'
     ];
 
-    public function isApplicable(?Order $order = null, ?Rate $rate = null): bool
+    public function isApplicable(?Order $order = null, ?\App\Services\RateHawk\Responses\DTO\Rate $rate = null): bool
     {
         try {
             $rule = (new RuleFactory())
@@ -40,7 +40,7 @@ class Rule extends Model
 
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
-        } finally {
+
             return false;
         }
     }
