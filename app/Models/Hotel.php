@@ -21,13 +21,17 @@ use function Symfony\Component\String\s;
  * @property string $checkout_time
  * @property string $area_description
  * @property integer $stars
+ * @property integer $region_id
  * @property bool $has_bus
+ * @property bool $has_monorail
  * @property bool $has_skyliner
  * @property bool $has_boat
  */
 class Hotel extends Model
 {
     use HasFactory;
+
+    public $guarded = [];
 
     public function thumbnail()
     {

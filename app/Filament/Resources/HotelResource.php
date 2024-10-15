@@ -18,18 +18,27 @@ class HotelResource extends Resource
     protected static ?string $model = Hotel::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-home-modern';
+    protected static ?string $navigationGroup = 'Hotels';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('ratehawk_id')
+                    ->label('RateHawk ID')
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('category')
+                Forms\Components\Select::make('category')
+                    ->label('Disney Resort Type')
+                    ->options([
+                        'value' => 'Value Resort',
+                        'moderate' => 'Moderate Resort',
+                        'luxury' => 'Deluxe Resort'
+                    ])
+                    ->default('value')
                     ->required(),
                 Forms\Components\TextInput::make('stars')
                     ->required()
@@ -41,7 +50,11 @@ class HotelResource extends Resource
                     ->required(),
                 Forms\Components\Toggle::make('has_skyliner')
                     ->required(),
+                Forms\Components\Toggle::make('has_monorail')
+                    ->required(),
                 Forms\Components\TextInput::make('area_description')
+                    ->label('Area Description')
+                    ->columnSpanFull()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('address')
@@ -75,7 +88,9 @@ class HotelResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category')
-                    ->formatStateUsing(),
+                    ->formatStateUsing(function ($state) {
+                        return $state;
+                    }),
                 Tables\Columns\TextColumn::make('stars')
                     ->numeric()
                     ->sortable(),
@@ -87,6 +102,9 @@ class HotelResource extends Resource
                     ->boolean(),
                 Tables\Columns\IconColumn::make('has_skyliner')
                     ->label('Skyliner')
+                    ->boolean(),
+                Tables\Columns\IconColumn::make('has_monorail')
+                    ->label('Monorail')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('checkin_time')
                     ->searchable(),

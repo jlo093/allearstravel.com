@@ -45,6 +45,8 @@ class UpdateHotelInformation extends Command
                 continue;
             }
 
+            $this->output->writeln('Currently processing ' . $hotel->name);
+
             /** @var HotelInformationResponse $response */
             $response = $ratehawk->send(
                 new GetHotelInformationByIdRequest(

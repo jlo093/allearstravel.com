@@ -111,21 +111,49 @@
                             {{ $dbHotel->description }}
                         </p>
                     </div>
-                    @foreach ($dbHotel->getFormattedAmenities() as $category => $list)
-                        <section class="facilities">
-                            <h4 class="facilities_header">{{ $category }}</h4>
-                            <div class="facilities_list d-sm-flex flex-wrap">
-                                @foreach ($list as $item)
-                                <div class="facilities_list-block">
-                                        <span class="facilities_list-block_item d-flex align-items-center">
+
+                    @if ($dbHotel->region_id == \App\Enums\RegionEnum::DISNEY_WORLD->value)
+                    <section class="rules">
+                        <h4 class="rules_header">{{ __('Resort Transport') }}</h4>
+                        <p>{{ __('At Disney World there are various options to travel around the resort and to/from the parks.') }}
+                        {{ __(sprintf('%s offers the following options:', $dbHotel->name)) }}</p>
+
+                        <div class="rules_list d-md-flex flex-lg-wrap mt-3">
+                            <div>
+                                @if ($dbHotel->has_bus)
+                                <p class="rules_list-block_item d-flex align-items-baseline">
+                                    <i class="icon-check icon"></i>
+                                    Bus
+                                </p>
+                                @endif
+
+                                    @if ($dbHotel->has_boat)
+                                        <p class="rules_list-block_item d-flex align-items-baseline">
                                             <i class="icon-check icon"></i>
-                                            {{ $item }}
-                                        </span>
-                                </div>
-                                @endforeach
+                                            Boat/Ferry
+                                        </p>
+                                    @endif
+
+                                    @if ($dbHotel->has_skyliner)
+                                        <p class="rules_list-block_item d-flex align-items-baseline">
+                                            <i class="icon-check icon"></i>
+                                            Skyliner (Cable Car)
+                                        </p>
+                                    @endif
+
+                                    @if ($dbHotel->has_monorail)
+                                        <p class="rules_list-block_item d-flex align-items-baseline">
+                                            <i class="icon-check icon"></i>
+                                            Monorail
+                                        </p>
+                                    @endif
                             </div>
-                        </section>
-                    @endforeach
+                        </div>
+
+                        <p>You can find more details on the official Disney World website by <a class="attn-link" href="https://www.disneyworld.co.uk/guest-services/resort-transportation/" target="_blank">clicking here</a>.</p>
+                    </section>
+                    @endif
+
                     <section class="rules">
                         <h4 class="rules_header">Conditions</h4>
                         <div class="rules_list d-md-flex flex-lg-wrap">
@@ -141,6 +169,58 @@
                             </div>
                         </div>
                     </section>
+
+
+                    <div>
+                        <h4 class="mt-5 mb-3">{{ __('Available Rooms') }}</h4>
+                        <ul class="rooms_list d-md-flex flex-wrap">
+                            @foreach($hotel->rates as $rate)
+                                <li class="rooms_list-item col-md-12 col-xl-12 mb-5 aos-init" data-order="1" data-aos="fade-up">
+                                    <div class="item-wrapper d-md-flex flex-wrap">
+                                        <div class="main d-md-flex flex-column justify-content-between flex-grow-1 col-8">
+                                            <a class="main_title h4" href="" style="max-width: none">{{ $rate->room_name }}</a>
+                                            @if (!empty($hotel->rates[0]->payment_options->payment_types[0]->cancellation_penalties['free_cancellation_before']))
+                                                <span class="main_amenities-item d-inline-flex align-items-center">
+                                                    <i class="icon-clock icon"></i>
+                                                    @php $date =$hotel->rates[0]->payment_options->payment_types[0]->cancellation_penalties['free_cancellation_before']; @endphp
+                                                    Free cancellation before {{ \Carbon\Carbon::createFromFormat('Y-m-d', substr($date, 0, 10))->format('d/m/Y') }}
+                                                </span>
+                                            @else
+                                                <span class="main_amenities-item d-inline-flex align-items-center">
+                                                    <i class="icon-close icon"></i>
+                                                    Non-refundable rate.
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <div class="media col-4" style="height: 80px; text-align: right">
+                                            <span style="font-weight:bold;">Total: &pound;{{ number_format($rate->final_price, 2) }}</span>
+                                            <a class="theme-element theme-element--accent btn m-3" href="{{ route('booking.room', ['id' => $pnr, 'hash' => $rate->match_hash]) }}" style="max-width: 300px">
+                                                Make Reservation
+                                                <i class="icon-arrow_right icon"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+
+                @foreach ($dbHotel->getFormattedAmenities() as $category => $list)
+                        <section class="facilities">
+                            <h4 class="facilities_header">{{ $category }}</h4>
+                            <div class="facilities_list d-sm-flex flex-wrap">
+                                @foreach ($list as $item)
+                                <div class="facilities_list-block">
+                                        <span class="facilities_list-block_item d-flex align-items-center">
+                                            <i class="icon-check icon"></i>
+                                            {{ $item }}
+                                        </span>
+                                </div>
+                                @endforeach
+                            </div>
+                        </section>
+                    @endforeach
                 </div>
                 <div class="room_main-cards col-lg-4">
                     <div class="room_main-cards_card accent">
@@ -155,35 +235,6 @@
             </div>
         </div>
     </div>
-
-    <section class="rooms section--blockbg section">
-        <div class="block"></div>
-        <div class="container">
-            <div class="rooms_header d-sm-flex justify-content-between align-items-center">
-                <h2 class="rooms_header-title aos-init" data-aos="fade-right">{{ __('Available Rooms') }}</h2>
-                <div class="wrapper aos-init" data-aos="fade-left">
-                </div>
-            </div>
-            <ul class="rooms_list d-md-flex flex-wrap">
-                @foreach($hotel->rates as $rate)
-                <li class="rooms_list-item col-md-12 col-xl-12 mb-5 aos-init" data-order="1" data-aos="fade-up">
-                    <div class="item-wrapper d-md-flex flex-wrap">
-                        <div class="main d-md-flex flex-column justify-content-between flex-grow-1 col-8">
-                            <a class="main_title h4" href="" style="max-width: none">{{ $rate->room_name }}</a>
-                            &pound;{{ $rate->final_price }}
-                        </div>
-                        <div class="media col-4" style="height: 80px; text-align: center">
-                            <a class="theme-element theme-element--accent btn" href="{{ route('booking.room', ['id' => $pnr, 'hash' => $rate->match_hash]) }}" style="max-width: 300px">
-                                Make Reservation
-                                <i class="icon-arrow_right icon"></i>
-                            </a>
-                        </div>
-                    </div>
-                </li>
-                @endforeach
-            </ul>
-        </div>
-    </section>
 
 </main>
 <script>
